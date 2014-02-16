@@ -1,0 +1,31 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.phucn.mvc" android:versionCode="10"
+	android:versionName="1.0">
+	<application android:debuggable="false"
+		android:label="@string/APP_NAME" android:name="com.phucn.mvc.common.ApplicationInfo">
+		
+
+	</application>
+
+	
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE">
+	</uses-permission>
+	<uses-permission android:name="android.permission.READ_PHONE_STATE">
+	</uses-permission>
+	<uses-permission android:name="android.permission.VIBRATE">
+	</uses-permission>
+	<uses-permission android:name="android.permission.INTERNET">
+	</uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION">
+	</uses-permission>
+	<uses-permission android:name="android.permission.CALL_PHONE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE">
+	</uses-permission>
+	<uses-permission android:name="android.permission.RECEIVE_SMS">
+	</uses-permission>
+	<uses-permission android:name="android.permission.READ_CONTACTS">
+	</uses-permission>
+	<uses-permission android:name="android.permission.READ_PHONE_STATE">
+	</uses-permission>
+
+</manifest>
