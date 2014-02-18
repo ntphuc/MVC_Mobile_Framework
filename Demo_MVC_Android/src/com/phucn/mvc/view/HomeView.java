@@ -80,6 +80,7 @@ public class HomeView extends BaseActivity implements OnItemClickListener {
 		
 	}
 	
+	
 	protected void gotoPlaylist(String item) {
 		// TODO Auto-generated method stub
 		ActionEvent e = new ActionEvent();

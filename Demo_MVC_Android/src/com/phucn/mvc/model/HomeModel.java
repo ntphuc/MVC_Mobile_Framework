@@ -14,7 +14,7 @@ import com.phucn.mvc.lib.network.HTTPResponse;
 import com.phucn.mvc.util.StringUtil;
 
 
-public class HomeModel extends AbstractModelService {
+public class HomeModel extends AbstractModel{
 	protected static HomeModel instance;
 
 	protected HomeModel() {
@@ -55,9 +55,7 @@ public class HomeModel extends AbstractModelService {
 		}
 		JSONObject json;
 		switch (mes.getAction()) {
-		
 		case ActionEventConstant.GET_LIST_PLAYLIST:
-			
 			try {
 				json = new JSONObject((String) mes.getDataText());
 				JSONObject result = json.getJSONObject("error");
