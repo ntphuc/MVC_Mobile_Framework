@@ -1,11 +1,10 @@
+
 package com.phucn.mvc.view;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,93 +17,86 @@ import com.phucn.mvc.R;
 import com.phucn.mvc.constants.ActionEventConstant;
 import com.phucn.mvc.constants.IntentConstants;
 import com.phucn.mvc.controller.ActionEvent;
-import com.phucn.mvc.controller.HomeController;
-import com.phucn.mvc.dto.PlaylistDTO;
-import com.phucn.mvc.dto.PlaylistItemDTO;
+import com.phucn.mvc.controller.YoutubeController;
+import com.phucn.mvc.dto.ListCategoryDTO;
 import com.phucn.mvc.model.ModelEvent;
-import com.phucn.mvc.model.ServerPath;
-import com.phucn.mvc.view.cell.PlaylistItemCell;
+import com.phucn.mvc.view.cell.CategoryCell;
 
-public class PlaylistItemView extends BaseActivity implements OnItemClickListener {
 
-	public List<PlaylistItemDTO> listPlaylist = new ArrayList<PlaylistItemDTO>();
+public class YoutubeView extends BaseActivity implements OnItemClickListener {
+
+	public List<String> listCategories = new ArrayList<String>();
 
 	private StandardArrayAdapter arrayAdapter;
 
-
-
 	private ListView listView;
-
-	private PlaylistDTO playlistDTO;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list_categories);
-
+		
 		listView = (ListView) findViewById(R.id.list_view);
 		listView.setOnItemClickListener(this);
-		Bundle bundle = getIntent().getExtras();
-		if (bundle != null) {
-			playlistDTO = (PlaylistDTO) bundle
-					.getSerializable(IntentConstants.INTENT_PLAYLIST_DTO);
-
-			sendActionEvent();
-
-		}
+		displayData();
 	}
-
+	
 	public void sendActionEvent() {
 		Vector<String> vt = new Vector<String>();
-		vt.add(IntentConstants.INTENT_PLAYLIST_ID);
-		vt.add(playlistDTO.playlistId);
-		vt.add(IntentConstants.INTENT_KEY);
-		vt.add(ServerPath.KEY);
-		vt.add(IntentConstants.INTENT_PART);
-		vt.add("snippet");
-		vt.add(IntentConstants.MAX_RESULTS);
-		vt.add("20");
 		ActionEvent e = new ActionEvent();
-		e.action = ActionEventConstant.GET_LIST_PLAYLIST_ITEM;
+		e.action = ActionEventConstant.GET_LIST_CATEGORY;
 		e.viewData = vt;
-		e.sender = PlaylistItemView.this;
-		HomeController.getInstance().sendActionEvent(e);
+		e.sender = YoutubeView.this;
+		YoutubeController.getInstance().sendActionEvent(e);
 	}
-
+	
+	
+	
 	@Override
 	public void onReceiveSuccess(ModelEvent modelEvent) {
 		// TODO Auto-generated method stub
 		ActionEvent e = modelEvent.getActionEvent();
 		switch (e.action) {
-		case ActionEventConstant.GET_LIST_PLAYLIST_ITEM:
-			displayData(modelEvent);
+		case ActionEventConstant.GET_LIST_CATEGORY:
+			displayData();
 			break;
 		default:
 			break;
 		}
 	}
-
+	
 	@Override
 	public void onReceiveError(ModelEvent modelEvent) {
 		// TODO Auto-generated method stub
 		super.onReceiveError(modelEvent);
 	}
 
-	public void displayData(ModelEvent modelEvent) {
+	public void displayData() {
 		// TODO Auto-generated method stub
-		listPlaylist= (List<PlaylistItemDTO>) modelEvent
-				.getModelData();
-		arrayAdapter = new StandardArrayAdapter(listPlaylist);
+		listCategories = ListCategoryDTO.getListCategories();
+		arrayAdapter = new StandardArrayAdapter(listCategories);
 		listView.setAdapter(arrayAdapter);
-
+		
+	}
+	
+	
+	protected void gotoPlaylist(String item) {
+		// TODO Auto-generated method stub
+		ActionEvent e = new ActionEvent();
+		e.sender = this;
+		Bundle bundle = new Bundle();
+		bundle.putString(IntentConstants.INTENT_CATEGORY, item);
+		e.viewData = bundle;
+		e.action = ActionEventConstant.GOTO_PLAY_LIST;
+		YoutubeController.getInstance().handleSwitchView(e);
 	}
 
 	private class StandardArrayAdapter extends BaseAdapter {
 
-		private List<PlaylistItemDTO> dataSource = new ArrayList<PlaylistItemDTO>();
+		private List<String> dataSource = new ArrayList<String>();
 
-		public StandardArrayAdapter(final List<PlaylistItemDTO> items) {
+		public StandardArrayAdapter(final List<String> items) {
 			super();
 			this.dataSource = items;
 		}
@@ -112,16 +104,16 @@ public class PlaylistItemView extends BaseActivity implements OnItemClickListene
 		@Override
 		public View getView(final int position, View view,
 				final ViewGroup parent) {
-			PlaylistItemCell cell;
+			CategoryCell cell;
 			if (position < dataSource.size()) {
 				if (view == null) {
-					cell = new PlaylistItemCell(parent.getContext());
+					cell = new CategoryCell(parent.getContext());
 					view = cell;
 				} else {
-					cell = (PlaylistItemCell) view;
+					cell = (CategoryCell) view;
 				}
-				PlaylistItemDTO item = ((PlaylistItemDTO) getItem(position));
-				cell.updateData( item);
+				String title = ((String) getItem(position));
+				cell.updateData((String) title);
 
 			}
 			return view;
@@ -164,12 +156,7 @@ public class PlaylistItemView extends BaseActivity implements OnItemClickListene
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
-		PlaylistItemDTO item = (PlaylistItemDTO) (listPlaylist
+		gotoPlaylist((String)listCategories
 				.get(arg2));
-		Intent videoClient = new Intent(Intent.ACTION_VIEW);
-		videoClient.setData(Uri.parse("http://youtube.com/watch?v="
-				+ item.videoId));
-		startActivityForResult(videoClient, 1234);
 	}
-
 }

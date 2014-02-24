@@ -17,7 +17,7 @@ import com.phucn.mvc.R;
 import com.phucn.mvc.constants.ActionEventConstant;
 import com.phucn.mvc.constants.IntentConstants;
 import com.phucn.mvc.controller.ActionEvent;
-import com.phucn.mvc.controller.HomeController;
+import com.phucn.mvc.controller.YoutubeController;
 import com.phucn.mvc.dto.PlaylistDTO;
 import com.phucn.mvc.model.ModelEvent;
 import com.phucn.mvc.model.ServerPath;
@@ -71,7 +71,7 @@ public class PlaylistView extends BaseActivity implements OnItemClickListener {
 		e.action = ActionEventConstant.GET_LIST_PLAYLIST;
 		e.viewData = vt;
 		e.sender = PlaylistView.this;
-		HomeController.getInstance().sendActionEvent(e);
+		YoutubeController.getInstance().sendActionEvent(e);
 	}
 	
 	
@@ -91,11 +91,8 @@ public class PlaylistView extends BaseActivity implements OnItemClickListener {
 	@SuppressWarnings("unchecked")
 	public void displayData(ModelEvent modelEvent) {
 		// TODO Auto-generated method stub
-		playList = (List<PlaylistDTO>)modelEvent.getModelData();
-	
-		arrayAdapter = new StandardArrayAdapter(playList);
-		
-		
+		playList = (List<PlaylistDTO>)modelEvent.getModelData();	
+		arrayAdapter = new StandardArrayAdapter(playList);	
 		listView.setAdapter(arrayAdapter);
 	}
 	
@@ -181,6 +178,6 @@ public class PlaylistView extends BaseActivity implements OnItemClickListener {
 		bundle.putSerializable(IntentConstants.INTENT_PLAYLIST_DTO, item);
 		e.viewData = bundle;
 		e.action = ActionEventConstant.GOTO_PLAY_LIST_ITEM;
-		HomeController.getInstance().handleSwitchView(e);
+		YoutubeController.getInstance().handleSwitchView(e);
 	}
 }

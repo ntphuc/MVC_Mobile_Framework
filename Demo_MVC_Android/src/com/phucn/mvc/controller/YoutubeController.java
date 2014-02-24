@@ -8,21 +8,20 @@ import android.os.Bundle;
 
 import com.phucn.mvc.constants.ActionEventConstant;
 import com.phucn.mvc.lib.network.NetworkUtil;
-import com.phucn.mvc.model.HomeModel;
+import com.phucn.mvc.model.YoutubeModel;
 import com.phucn.mvc.model.ServerPath;
-import com.phucn.mvc.view.PlaylistItemView;
 import com.phucn.mvc.view.PlaylistView;
 
-public class HomeController extends AbstractController {
+public class YoutubeController extends AbstractController {
 
-	static HomeController instance;
+	static YoutubeController instance;
 
-	protected HomeController() {
+	protected YoutubeController() {
 	}
 
-	public static HomeController getInstance() {
+	public static YoutubeController getInstance() {
 		if (instance == null) {
-			instance = new HomeController();
+			instance = new YoutubeController();
 		}
 		return instance;
 	}
@@ -37,16 +36,14 @@ public class HomeController extends AbstractController {
 		case ActionEventConstant.GET_LIST_PLAYLIST:
 			method = "search";
 			break;
-		case ActionEventConstant.GET_LIST_PLAYLIST_ITEM:
-			method = "playlistItems";
-			break;
+
 		}
 
 		try {
 			Vector<String> info = (Vector<String>) e.viewData;
 			String url = ServerPath.SERVER_PATH
 					+ NetworkUtil.createStringURL(method, info);
-			HomeModel.getInstance().sendHttpRequest(url, e);
+			YoutubeModel.getInstance().sendHttpRequest(url, e);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -66,12 +63,7 @@ public class HomeController extends AbstractController {
 			intent.putExtras(extras);
 			base.startActivity(intent);
 			break;
-		case ActionEventConstant.GOTO_PLAY_LIST_ITEM:
-			intent = new Intent(base, PlaylistItemView.class);
-			extras = (Bundle) e.viewData;
-			intent.putExtras(extras);
-			base.startActivity(intent);
-			break;
+		
 		default:
 			break;
 		}
