@@ -5,7 +5,7 @@
 		android:label="@string/APP_NAME" >
 		
 		<activity android:configChanges="keyboardHidden|orientation"
-			android:name=".view.HomeView" android:theme="@android:style/Theme.Light.NoTitleBar">
+			android:name=".view.YoutubeView" android:theme="@android:style/Theme.Light.NoTitleBar">
 			<!---->
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
